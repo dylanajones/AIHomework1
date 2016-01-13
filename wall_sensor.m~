@@ -1,0 +1,13 @@
+% This is the wall sensor
+
+function [r] = wall_sensor(loc, dir, room)
+    
+    next_loc = loc + dir;
+    
+    dims = size(room);
+    r = dims(1);
+    c = dims(2);
+    
+    if (next_loc(1) <= r || next_loc(1) > 
+    
+end
