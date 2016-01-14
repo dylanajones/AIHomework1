@@ -27,7 +27,7 @@ dir = [-1,0];
 
 %% Deterministic Reflex Agent
 
-num_its = 100;
+num_its = 500;
 
 performance = zeros(num_its,1);
 
@@ -41,9 +41,9 @@ for z = 1:num_its
         loc = loc + dir;
     end
     
-    display(room)
-    display(dir)
-    display(loc)
+%     display(room)
+%     display(dir)
+%     display(loc)
     
 %     figure(1)
 %     waitforbuttonpress
@@ -113,7 +113,82 @@ for y = 1:num_runs
 
     end
 end
-
+figure(1)
+hold on
 plot(mean(performance));
 
 %% Deterministic Model-Based Reflex Agent
+
+% Position 1 indicates if we should move forward
+% Position 2 indicates if we should turn
+% Position 3 indicates which direction we should turn
+%   - 0 => turn right
+%   - 0 => turn left
+
+s_memory = [0,0,0];
+time_end = 1;
+num_actions = 0;
+
+while time_end ~= 0
+    num_actions = num_actions + 1;
+    if (read_sensor(loc, room) == 1)
+        room(loc(1),loc(2)) = 0;
+    elseif ( s_memory(1) == 1 && wall_sensor(loc, dir, room) == 1 )
+        time_end = 0;
+    elseif ( s_memory(1) == 1 )
+        loc = loc + dir;
+        s_memory(1) = 0;
+        s_memory(2) = 1;
+    elseif ( s_memory(2) == 1)
+        if ( s_memory(3) == 0 )
+            dir = turn_right(dir);
+            s_memory(3) = 1;
+        else
+            dir = turn_left(dir);
+            s_memory(3) = 0;
+        end
+        
+        s_memory(2) = 0;
+    elseif ( wall_sensor(loc, dir, room) == 1 )   
+        if s_memory(3) == 0;
+            dir = turn_right(dir);
+        else
+            dir = turn_left(dir);
+        end
+
+        s_memory(1) = 1;
+
+    else
+        loc = loc + dir;
+    end
+
+%         display(room)
+%         display(dir)
+%         display(loc)
+%         display(s_memory)
+% 
+%         figure(1)
+%         waitforbuttonpress
+        
+        performance(num_actions) = count_clean(room);
+    
+end
+
+plot(performance);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
