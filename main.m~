@@ -60,7 +60,7 @@ plot(performance);
 
 num_its = 1000;
 num_runs = 100;
-decison_prob = .75;
+decison_prob = .9;
 
 performance = zeros(num_runs, num_its);
 num_actions_needed = zeros(num_runs,1);
@@ -214,7 +214,9 @@ figure(1)
 hold on
 plot(performance,'g');
 hold off
-title('Perfor
+title('Performance Compairison Graph for all Three Agents')
+xlabel('Number of Actions')
+ylabel('Number of Spots Cleaned')
 
 
 
